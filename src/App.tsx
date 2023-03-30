@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import './App.css';
+// import { useState } from 'react';
 import axios from 'axios';
 
 interface Campground {
@@ -20,25 +20,51 @@ interface Campground {
   state: string;
   nearest_town: string;
 }
-function App() {
+
+const defaultCampgrounds: Campground[] = [];
+
+const App = () => {
+  const [campgrounds, setCampgrounds]: [Campground[], (campgrounds: Campground[]) => void] = React.useState(
+    defaultCampgrounds
+    );
+  const [loading, setLoading]: [
+    boolean,
+    (loading: boolean) => void
+  ] = React.useState<boolean>(true)
+
+  const [error, setError]: [string, (error: string) => void]= React.useState('')
+
+  React.useEffect(() => {
+    axios.get<Campground[]>("http://localhost:3000/campgrounds", {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => {
+      setCampgrounds(response.data);
+      setLoading(false)
+    })
+    .catch(ex => {
+      const error = ex.response.status === 404 ? "Resource Not Found" : "An Unexpected Error Has Occurred"
+      setError(error)
+      setLoading(false)
+    })
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <ul className='campgrounds'>
+        {campgrounds.map((campground) => (
+          <li key={campground.id}>
+            <h3>{campground.campground_name}</h3>
+          </li>
+        ))}
+      </ul>
+      {error && <p className='error'>{error}</p>}
     </div>
-  );
+  )
 }
+
+
 
 export default App;
