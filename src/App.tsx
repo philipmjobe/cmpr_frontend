@@ -1,7 +1,25 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
+interface Campground {
+  id: number;
+  lon: number;
+  lat: number;
+  gps_composite_field: string;
+  campground_code: string;
+  campground_name: string;
+  campground_type: string;
+  phone_number: string;
+  dates_open: string;
+  comments: string;
+  number_of_campsites: number;
+  elevation: string;
+  amenities: string;
+  state: string;
+  nearest_town: string;
+}
 function App() {
   return (
     <div className="App">
