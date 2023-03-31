@@ -1,11 +1,12 @@
 import React from 'react';
-// import './App.css';
-import Campgrounds from "./components/campgrounds.tsx"
+// import Campgrounds from "./components/campgrounds.tsx"
+import Map from "./components/map.tsx"
 
 function App() {
   return (
     <div className="App">
-     <Campgrounds />
+     {/* <Campgrounds /> */}
+     <Map />
     </div>
   );
 }
