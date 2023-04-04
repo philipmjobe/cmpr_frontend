@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import mapboxgl from '!mapbox-gl'; 
-import Marker from '!mapbox-gl';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicGhpbGlwam9iZSIsImEiOiJjbGZ3dWhsdXcwYmJ0M2VxY2tyZjgzc3lkIn0.8BkhvRQElOx7NXiGvRBA-A';
 
@@ -33,14 +31,8 @@ export default function App() {
 
   return (
     <div>
-      <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div>
       <div ref={mapContainer} className="map-container" 
       />
-      <Marker longitude={-100} latitude={40} anchor="bottom" >
-      {/* <img src="./pin.png" /> */}
-    </Marker>
     </div>
   );
 }
