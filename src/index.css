@@ -17,6 +17,9 @@ html, body {
 }
 
 .map-container {
-  height: 400px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
 }
 
