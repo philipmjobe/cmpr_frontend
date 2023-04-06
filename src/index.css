@@ -15,10 +15,3 @@ code {
 html, body {
   height: 100%;
 }
-.map-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-}
-

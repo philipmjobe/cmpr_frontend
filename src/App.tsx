@@ -1,7 +1,8 @@
 import React from 'react';
-// import campgrounds from "./components/campgrounds.tsx"
-import Map from "./components/map.tsx"
-// import { Marker } from 'react-map-gl';
+// import "./App.css"
+// import Campgrounds from "./components/campgrounds"
+import Map from "./components/Map"
+
 
 function App() {
   return (
