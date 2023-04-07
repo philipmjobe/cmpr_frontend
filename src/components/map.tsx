@@ -142,7 +142,8 @@ export default function App() {
     campgrounds.map((campground) => {
       const marker = new mapboxgl.Marker({
         color: "#ff0000"
-      }).setLngLat([campground.lon, campground.lat])
+      }).setLngLat([campground.lon, campground.lat]);
+      
       marker.addTo(map.current);
     });
   }, [campgrounds]);
