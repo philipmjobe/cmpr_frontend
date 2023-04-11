@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { State, Campground } from './interfaces';
+import { Campground, State } from './interfaces';
 
 interface Props {
   states: State[];
