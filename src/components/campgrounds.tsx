@@ -1,7 +1,7 @@
 import React from 'react';
 // import './App.css';
 // import { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 
 interface Campground {
   id: number;
@@ -23,7 +23,7 @@ interface Campground {
 
 const defaultCampgrounds: Campground[] = [];
 
-const App = () => {
+const Campground = () => {
   const [campgrounds, setCampgrounds]: [Campground[], (campgrounds: Campground[]) => void] = React.useState(
     defaultCampgrounds
     );
@@ -67,4 +67,4 @@ const App = () => {
 
 
 
-export default App;
+export default Campground;
