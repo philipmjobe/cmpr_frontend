@@ -1,4 +1,12 @@
-export interface Campground {
+// Define or import StateType and CampgroundType types
+export type State = {
+  id: number;
+  name: string;
+  lat: number;
+  lon: number;
+};
+
+export type Campground = {
   id: number;
   lon: number;
   lat: number;
@@ -14,11 +22,4 @@ export interface Campground {
   amenities: string;
   state: string;
   nearest_town: string;
-}
-
-export interface State {
-  id: number;
-  name: string;
-  lat: number;
-  lon: number;
-}
+};
