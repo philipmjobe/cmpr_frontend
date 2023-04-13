@@ -6,7 +6,7 @@ import { Campground } from './types'; // Import Campground type
 
 // Define custom icon for marker
 const customIcon = L.icon({
-  iconUrl: require('https://www.shutterstock.com/image-vector/black-round-geo-map-direction-260nw-253637140.jpg'),
+  iconUrl: require('./assets/marker.png'),
   iconSize: [25, 41],
   iconAnchor: [13, 41],
   popupAnchor: [0, -41]
@@ -62,3 +62,4 @@ const Map: React.FC<MapProps> = ({ campgrounds }) => {
 };
 
 export default Map;
+
