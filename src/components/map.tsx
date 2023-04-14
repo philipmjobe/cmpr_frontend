@@ -17,7 +17,10 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ campgrounds }) => {
-  type MC = typeof MapContainer; const mapRef = useRef<MC | null>(null);
+  // type MC = typeof MapContainer; const mapRef = useRef<MC | null>(null);
+  //@ts-ignore
+  const mapRef = useRef<MapContainer | null>(null); // Update the type of mapRef
+
 
   useEffect(() => {
     // Fly to the bounds of the campground with animation
@@ -27,7 +30,7 @@ const Map: React.FC<MapProps> = ({ campgrounds }) => {
         campground.lon
       ])
     );
-    (mapRef.current as any).leafletElement.fitBounds(bounds, { // Use leafletElement to access map instance
+    mapRef.current?.leafletElement.fitBounds(bounds, { // Use leafletElement to access map instance
       animate: true,
       duration: 1
     });
@@ -62,4 +65,3 @@ const Map: React.FC<MapProps> = ({ campgrounds }) => {
 };
 
 export default Map;
-
