@@ -21,7 +21,6 @@ const Map: React.FC<MapProps> = ({ campgrounds }) => {
   //@ts-ignore
   const mapRef = useRef<MapContainer | null>(null); // Update the type of mapRef
 
-
   useEffect(() => {
     // Fly to the bounds of the campground with animation
     const bounds = L.latLngBounds(

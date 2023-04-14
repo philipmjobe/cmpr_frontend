@@ -23,24 +23,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
     ]
   },
   "browserslist": {
@@ -56,17 +44,6 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.4",
-    "@storybook/addon-interactions": "^7.0.4",
-    "@storybook/addon-links": "^7.0.4",
-    "@storybook/blocks": "^7.0.4",
-    "@storybook/preset-create-react-app": "^7.0.4",
-    "@storybook/react": "^7.0.4",
-    "@storybook/react-webpack5": "^7.0.4",
-    "@storybook/testing-library": "^0.0.14-next.2",
-    "@types/leaflet": "^1.9.3",
-    "babel-plugin-named-exports-order": "^0.0.2",
-    "prop-types": "^15.8.1",
-    "webpack": "^5.79.0"
+    "@types/leaflet": "^1.9.3"
   }
 }
