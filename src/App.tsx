@@ -23,7 +23,7 @@ const App = () => {
   return (
     <div>
       {/* Render Map component and pass in campgrounds */}
-      <Map campgrounds={campgrounds} />
+      {/* <Map campgrounds={campgrounds} /> */}
     </div>
   );
 };
