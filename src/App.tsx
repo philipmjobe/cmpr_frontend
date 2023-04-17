@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Map from "./components/Map";
+import LeafletMap from "./components/LeafletMap";
 import axios from "axios";
 
 const App = () => {
@@ -21,9 +21,9 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      {/* Render Map component and pass in campgrounds */}
-      {/* <Map campgrounds={campgrounds} /> */}
+    <div id="map">
+      {/* Render Map component */}
+      <LeafletMap />
     </div>
   );
 };
