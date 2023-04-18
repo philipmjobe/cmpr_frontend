@@ -8,7 +8,7 @@ import { MapContainer } from 'react-leaflet';
     const mapRef = useRef(null);
 
     useEffect(() => {
-      const map = L.map('map').setView([37.8, -96], 4);
+      const map = L.map('map').setView([48.3544091, -99.9980711], 4);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
