@@ -52,11 +52,11 @@ import { MapContainer } from 'react-leaflet';
 
       function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
         layer.on({
-          click: (e: L.LeafletEvent) => ({
+          // click: (e: L.LeafletEvent) => ({
             mouseover: highlightFeature,
-            onmouseout: resetHighlight,
+            mouseout: resetHighlight,
             click: zoomToFeature
-          })
+          // })
         });
       }
 
