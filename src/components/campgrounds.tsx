@@ -23,7 +23,7 @@ interface Campground {
 
 const defaultCampgrounds: Campground[] = [];
 
-const Campground = () => {
+export default function Campgrounds() {
   const [campgrounds, setCampgrounds]: [Campground[], (campgrounds: Campground[]) => void] = React.useState(
     defaultCampgrounds
     );
@@ -64,7 +64,3 @@ const Campground = () => {
     </div>
   )
 }
-
-
-
-export default Campground;
