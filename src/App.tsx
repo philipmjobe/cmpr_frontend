@@ -23,7 +23,7 @@ const App = () => {
   return (
     <div id="map">
       {/* Render Map component */}
-      <LeafletMap />
+      <LeafletMap campgrounds={campgrounds}/>
     </div>
   );
 };
