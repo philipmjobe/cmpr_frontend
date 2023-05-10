@@ -5,7 +5,7 @@ import axios from 'axios';
 
 interface Campground {
   id: number;
-  lon: number;
+  lng: number;
   lat: number;
   gps_composite_field: string;
   campground_code: string;

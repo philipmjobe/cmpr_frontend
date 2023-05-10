@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LeafletMap from "./components/LeafletMap";
+import {LeafletMap} from "./components/LeafletMap";
 import axios from "axios";
 
 const App = () => {
