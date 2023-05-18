@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import LeafletMap from "./components/LeafletMap";
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import axios from "axios";
 
 const App = () => {
-  // Define campground data
   const [campgrounds, setCampgrounds] = useState([]);
 
-  // Fetch campground data from backend on component mount
   useEffect(() => {
     const fetchCampgrounds = async () => {
       try {
         const response = await axios.get("http://localhost:3000/campgrounds");
-        setCampgrounds(response.data); // assuming response.data is an array of campground objects
+        setCampgrounds(response.data);
       } catch (error) {
         console.error("Failed to fetch campgrounds:", error);
       }
@@ -21,9 +19,21 @@ const App = () => {
   }, []);
 
   return (
-    <div id="map">
-      {/* Render Map component */}
-      <LeafletMap campgrounds={campgrounds}/>
+    <div id="map" style={{ height: '100vh' }}>
+      <MapContainer
+        center={[48.3544091, -99.9980711]}
+        zoom={4}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <TileLayer
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          attribution='© OpenStreetMap contributors'
+        />
+        
+        {campgrounds.map((campground: any) => (
+          <Marker position={[campground.lat, campground.lng]} key={campground.id} />
+        ))}
+      </MapContainer>
     </div>
   );
 };

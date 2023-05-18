@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
+import L, { Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
-import { MapContainer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { Campground } from './types';
+import { Feature, GeoJSON } from 'geojson';
 
 interface CampgroundProps {
   campgrounds: Campground[];
 }
+
+interface FeatureLayer extends Layer {
+  feature?: Feature;
+}
+
 const myIcon = L.icon({
   iconUrl: 'components/assets/marker.png',
   iconSize: [38, 95],
@@ -15,10 +21,12 @@ const myIcon = L.icon({
   popupAnchor: [-3, -76],
   shadowUrl: 'my-icon-shadow.png',
   shadowSize: [68, 95],
-  shadowAnchor: [22, 94]
+  shadowAnchor: [22, 94],
 });
-const LeafletMap: React.FC<CampgroundProps> = ({campgrounds}: CampgroundProps) => {
-  const mapRef = useRef(null);
+
+const LeafletMap: React.FC<CampgroundProps> = ({ campgrounds }: CampgroundProps) => {
+  const mapRef = useRef<L.Map | null>(null);
+  const geojsonRef = useRef<L.GeoJSON | null>(null);
 
   useEffect(() => {
     const map = L.map('map', {
@@ -56,49 +64,65 @@ const LeafletMap: React.FC<CampgroundProps> = ({campgrounds}: CampgroundProps) =
     }
 
     function resetHighlight(e: LeafletMouseEvent) {
-      geojson.resetStyle(e.target);
+      const geojson = geojsonRef.current;
+      if (geojson) {
+        geojson.resetStyle(e.target as L.Path);
+      }
     }
 
-    let geojson: GeoJSON;
-
     function zoomToFeature(e: LeafletMouseEvent) {
-      map.fitBounds(e.target.getBounds());
+      const map = mapRef.current;
+      if (map) {
+        map.fitBounds(e.target.getBounds());
+
+        const stateName = (e.target as FeatureLayer).feature?.properties?.name;
+        const stateCampgrounds = campgrounds.filter(campground => campground.state === stateName);
+
+        stateCampgrounds.forEach(campground => {
+          L.marker([campground.lat, campground.lng], { icon: myIcon }).addTo(map);
+        });
+      }
     }
 
     function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
-      layer.on({
+      const featureLayer = layer as FeatureLayer;
+
+      featureLayer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
         click: zoomToFeature,
       });
-    
-      const stateName = feature.properties?.name;
-    
-      // Filter campgrounds for the current state
-      const stateCampgrounds = campgrounds.filter(campground => campground.state === stateName);
-    
-      stateCampgrounds.forEach(campground => {
-        console.log('Creating marker for campground', campground)
-        L.marker([campground.lat, campground.lng], { icon: myIcon }).addTo(map);
-      });
     }
-    
-    geojson = L.geoJson(statesData, {
+
+    const geojson = L.geoJson(statesData, {
       style: style as L.StyleFunction,
       onEachFeature: onEachFeature,
     }).addTo(map);
+
+    geojsonRef.current = geojson;
 
     // Wait until the map is fully initialized before adding the drag handler
     map.whenReady(() => {
       map.dragging.enable();
     });
 
-    return () => {
-      map.remove();
-    };
+    mapRef.current = map;
   }, [campgrounds]);
 
-  return <MapContainer id='map' ref={mapRef} style={{ height: '100%', width: '100%', cursor: 'grab' }} />;
+  return (
+    <MapContainer
+      id='map'
+      ref={mapRef}
+      style={{ height: '100%', width: '100%', cursor: 'grab' }}
+      center={[48.3544091, -99.9980711]}
+      zoom={4}
+    >
+      <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution='© OpenStreetMap contributors' />
+
+      {/* Add any additional components or layers here */}
+    </MapContainer>
+  );
 };
 
-export default LeafletMap
+export default LeafletMap;
+
