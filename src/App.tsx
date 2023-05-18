@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Campground } from './components/types';
+import LeafletMap from './components/LeafletMap';
 
-const App = () => {
-  const [campgrounds, setCampgrounds] = useState([]);
+const App: React.FC = () => {
+  const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
 
   useEffect(() => {
     const fetchCampgrounds = async () => {
@@ -19,21 +20,8 @@ const App = () => {
   }, []);
 
   return (
-    <div id="map" style={{ height: '100vh' }}>
-      <MapContainer
-        center={[48.3544091, -99.9980711]}
-        zoom={4}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          attribution='© OpenStreetMap contributors'
-        />
-        
-        {campgrounds.map((campground: any) => (
-          <Marker position={[campground.lat, campground.lng]} key={campground.id} />
-        ))}
-      </MapContainer>
+    <div style={{ height: '100vh', width: '100vw' }}>
+      <LeafletMap campgrounds={campgrounds} />
     </div>
   );
 };
