@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Campground } from './components/types';
-import LeafletMap from './components/LeafletMap';
 
 const App: React.FC = () => {
   const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
@@ -21,7 +20,6 @@ const App: React.FC = () => {
 
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
-      <LeafletMap campgrounds={campgrounds} />
     </div>
   );
 };
