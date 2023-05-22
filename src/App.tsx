@@ -1,24 +1,28 @@
-import React from 'react';
-import * as maptilersdk from '@maptiler/sdk';
-
-const apiKey = process.env.REACT_APP_MAPTILER_API_KEY;
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Campground } from './components/types';
+import LeafletMap from './components/LeafletMap';
 
 const App: React.FC = () => {
-  maptilersdk.config.apiKey = apiKey || '';
+  const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
 
-  React.useEffect(() => {
-    const map = new maptilersdk.Map({
-      container: 'map', // Change this to 'mapContainer' if you updated the ID in the HTML
-      style: maptilersdk.MapStyle.STREETS,
-      center: [-99.9980711 ,48.3544091],
-      zoom: 3
-    });
+  useEffect(() => {
+    const fetchCampgrounds = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/campgrounds");
+        setCampgrounds(response.data);
+      } catch (error) {
+        console.error("Failed to fetch campgrounds:", error);
+      }
+    };
+    fetchCampgrounds();
   }, []);
 
   return (
-    <div id="mapContainer"> {/* Change the ID to 'mapContainer' or use a different ID */}
+        <div style={{ height: '100vh', width: '100vw' }}>
+      <LeafletMap campgrounds={campgrounds} />
     </div>
   );
 };
 
-export default App;
+export default App; 
