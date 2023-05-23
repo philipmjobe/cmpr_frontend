@@ -71,8 +71,8 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       // Add campground markers
       const stateName = e.target.feature.properties.name;
       const stateCampgrounds: Campground[] = campgrounds.filter(
-        (campground: Campground) => campground.state === stateName
-      );
+        (campground: Campground) => campground.state.trim().toUpperCase() === stateName.trim().toUpperCase()
+        );
 
       stateCampgrounds.forEach(campground => {
         L.marker([campground.lat, campground.lng]).addTo(map);
