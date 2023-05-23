@@ -1,29 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Campground } from './components/types';
+import React from 'react';
 import LeafletMap from './components/LeafletMap';
+import Campgrounds from './components/Campgrounds';
 
-const App: React.FC = () => {
-  const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
-
-  // Fetch campground data from backend on component mount
-  useEffect(() => {
-    const fetchCampgrounds = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/campgrounds");
-        setCampgrounds(response.data); // assuming response.data is an array of campground objects
-      } catch (error) {
-        console.error("Failed to fetch campgrounds:", error);
-      }
-    };
-    fetchCampgrounds();
-  }, []);
-
+const App = () => {
   return (
-        <div style={{ height: '100vh', width: '100vw' }}>
-      <LeafletMap />
+    <div style={{ height: '100vh', width: '100vw' }}>
+      <Campgrounds>
+        {campgrounds => <LeafletMap campgrounds={campgrounds} />}
+      </Campgrounds>
     </div>
   );
 };
 
-export default App; 
+export default App;
