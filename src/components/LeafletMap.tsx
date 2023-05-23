@@ -85,7 +85,9 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
           shadowSize: [41, 41],
           shadowAnchor: [13, 41]
         });
-        L.marker([campground.lat, campground.lng], { icon: customIcon }).addTo(map);
+        const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
+        marker.bindPopup(campground.campground_name);
+        marker.addTo(map);
       });
     }
 
