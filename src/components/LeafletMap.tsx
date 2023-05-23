@@ -39,7 +39,7 @@ const LeafletMap: React.FC<CampgroundProps> = ({ campgrounds }: CampgroundProps)
         dashArray: '3',
         fillOpacity: 0.7,
       };
-    }
+    }, []);
 
     function highlightFeature(e: LeafletMouseEvent) {
       const layer = e.target as FeatureLayer;
