@@ -71,11 +71,21 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       // Add campground markers
       const stateName = e.target.feature.properties.name;
       const stateCampgrounds: Campground[] = campgrounds.filter(
-        (campground: Campground) => campground.state.trim().toUpperCase() === stateName.trim().toUpperCase()
+        (campground: Campground) => campground.state.trim().toUpperCase() === stateName.trim().toUpperCase(),
         );
 
+
       stateCampgrounds.forEach(campground => {
-        L.marker([campground.lat, campground.lng]).addTo(map);
+        const customIcon = L.icon({
+          iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/800px-Google_Maps_pin.svg.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          // shadowUrl: 'https://media.istockphoto.com/id/1160934392/vector/thin-out-line-red-pin-location-gps-icon-geometric-marker-flat-shape-element-abstract-eps-10-shadow.jpg?s=612x612&w=0&k=20&c=z-mu6I7iC4aZwMQGOJvE7GHu1_4Zr_-RCdNej2CR6fY=',
+          shadowSize: [41, 41],
+          shadowAnchor: [13, 41]
+        });
+        L.marker([campground.lat, campground.lng], { icon: customIcon }).addTo(map);
       });
     }
 
