@@ -1,145 +1,79 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L, { GeoJSON, LeafletMouseEvent, Layer, PathOptions } from 'leaflet';
-import statesData from './assets/us-states';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
-import { Campground } from './types';
-import { Feature, GeometryObject } from 'geojson';
+import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
+import statesData from './assets/us-states'
+import { MapContainer } from 'react-leaflet';
 
-interface CampgroundProps {
-  campgrounds: Campground[];
-}
+  const LeafletMap = () => {
+    const mapRef = useRef(null);
 
-interface FeatureLayer extends Layer {
-  feature?: Feature<GeometryObject> | null;
-}
+    useEffect(() => {
+      const map = L.map('map').setView([48.3544091, -99.9980711], 4);
 
-const myIcon = L.icon({
-  iconUrl: 'components/assets/marker.png',
-  iconSize: [38, 95],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
-  shadowUrl: 'my-icon-shadow.png',
-  shadowSize: [68, 95],
-  shadowAnchor: [22, 94]
-});
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
 
-const LeafletMap: React.FC<CampgroundProps> = ({ campgrounds }: CampgroundProps) => {
-  const geojsonRef = useRef<GeoJSON<GeometryObject, any> | null>(null);
-  const [stateCampgrounds, setStateCampgrounds] = useState<Campground[]>([]);
-  const [showMarkers, setShowMarkers] = useState<boolean>(false);
+      function style(feature: GeoJSON.Feature): L.PathOptions {
+        return {
+          fillColor: 'black',
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.7
+        };
+      }
+    
+    
 
-  useEffect(() => {
-    function style(feature: Feature<GeometryObject>): PathOptions {
-      return {
-        fillColor: 'grey',
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7,
+      function highlightFeature(e: LeafletMouseEvent) {
+        const layer = e.target as L.Path;
+    
+        layer.setStyle({
+          weight: 5,
+          color: '#666',
+          dashArray: '',
+          fillOpacity: 0.7
+        });
+    
+        layer.bringToFront();
+      }
+    
+
+      function resetHighlight(e: LeafletMouseEvent) {
+        geojson.resetStyle(e.target);
+      }
+
+      let geojson: GeoJSON;
+      function zoomToFeature(e: LeafletMouseEvent) {
+        map.fitBounds(e.target.getBounds());
+      }
+
+      function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
+        layer.on({
+          // click: (e: L.LeafletEvent) => ({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+          // })
+        });
+      }
+
+      geojson = L.geoJson(statesData, {
+        style: style as L.StyleFunction,
+        onEachFeature: onEachFeature
+      }).addTo(map);
+
+      return () => {
+        map.remove();
       };
     }, []);
 
-    function highlightFeature(e: LeafletMouseEvent) {
-      const layer = e.target as FeatureLayer;
-
-      layer.setStyle({
-        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7,
-      });
-
-      if (!L.Browser.ie && !L.Browser.edge) {
-        layer.bringToFront();
-      }
-    }
-
-    function resetHighlight(e: LeafletMouseEvent) {
-      const geojson = geojsonRef.current;
-      if (geojson) {
-        geojson.resetStyle(e.target as FeatureLayer);
-      }
-    }
-
-    // let geoJson: GeoJSON;
-
-    function zoomToFeature(e: LeafletMouseEvent) {
-      const map = e.target?.getMap();
-      if (map) {
-        map.fitBounds(e.target.getBounds());
-
-        const stateName = (e.target as FeatureLayer).feature?.properties?.name;
-        const stateCampgrounds = campgrounds.filter(campground => campground.state === stateName);
-        setStateCampgrounds(stateCampgrounds);
-
-        setShowMarkers(true);
-      }
-    }
-
-    function onEachFeature(feature: Feature<GeometryObject>, layer: L.Layer) {
-      const featureLayer = layer as FeatureLayer;
-
-      featureLayer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature,
-      });
-    
-      const stateName = feature.properties?.name;
-    
-      // Filter campgrounds for the current state
-      const stateCampgrounds = campgrounds.filter(campground => campground.state === stateName);
-    
-      stateCampgrounds.forEach(campground => {
-        console.log('Creating marker for campground', campground)
-        L.marker([campground.lat, campground.lng], { icon: myIcon }).addTo(map);
-      });
-    }
-
-    const geoJson = L.geoJSON(statesData as GeoJSON.GeoJsonObject, {
-      style: style as L.PathOptions,
-      onEachFeature: onEachFeature,
-    });
-
-    geojsonRef.current = geoJson;
-
-    return () => {
-      geojsonRef.current?.clearLayers();
-    };
-  }, [campgrounds]);
-
-  useEffect(() => {
-    if (showMarkers) {
-      const map = geojsonRef.current?.getMap();
-      if (map) {
-        stateCampgrounds.forEach(campground => {
-          L.marker([campground.lat, campground.lng], { icon: myIcon }).addTo(map);
-        });
-      }
-    }
-  }, [stateCampgrounds, showMarkers]);
-
-  return (
-    <MapContainer
-      style={{ height: '500px', cursor: 'grab' }}
-      center={[48.3544091, -99.9980711]}
-      zoom={4}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
-
-      <GeoJSON ref={geojsonRef} />
-
-      {stateCampgrounds.map(campground => (
-        <Marker
-          position={[campground.lat, campground.lng]}
-          icon={myIcon}
-          key={campground.id}
-        />
-      ))}
-    </MapContainer>
-  );
-};
-
+    return <MapContainer ref={mapRef} style={{ height: '100%', width: '100%' }} />;
+  };
 export default LeafletMap;
+
+// function getColor(arg0: number | { [name: string]: any; }): string | undefined {
+//   throw new Error('Function not implemented.');
+// }

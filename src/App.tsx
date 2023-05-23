@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
   return (
         <div style={{ height: '100vh', width: '100vw' }}>
-      <LeafletMap campgrounds={campgrounds} />
+      <LeafletMap />
     </div>
   );
 };
