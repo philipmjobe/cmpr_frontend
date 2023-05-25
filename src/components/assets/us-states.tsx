@@ -99,7 +99,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "77",
     "properties" : {
-      "name" : "Nova Scotia"
+      "name" : "NS"
     },
     "geometry" : {
       "type" : "MultiPolygon",
