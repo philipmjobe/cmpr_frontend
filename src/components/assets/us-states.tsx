@@ -55,7 +55,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "73",
     "properties" : {
-      "name" : "Manitoba"
+      "name" : "MB"
     },
     "geometry" : {
       "type" : "MultiPolygon",
