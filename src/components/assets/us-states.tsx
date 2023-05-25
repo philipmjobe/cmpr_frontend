@@ -153,7 +153,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "82",
     "properties" : {
-      "name" : "Quebec"
+      "name" : "QC"
     },
     "geometry" : {
       "type" : "MultiPolygon",
