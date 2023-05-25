@@ -121,7 +121,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "79",
     "properties" : {
-      "name" : "Nunavut"
+      "name" : "NU"
     },
     "geometry" : {
       "type" : "MultiPolygon",
