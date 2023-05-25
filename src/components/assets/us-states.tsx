@@ -132,7 +132,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "80",
     "properties" : {
-      "name" : "Ontario"
+      "name" : "ON"
     },
     "geometry" : {
       "type" : "MultiPolygon",
