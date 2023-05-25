@@ -88,7 +88,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "76",
     "properties" : {
-      "name" : "Newfoundland  & Labrador"
+      "name" : "NL"
     },
     "geometry" : {
       "type" : "MultiPolygon",
