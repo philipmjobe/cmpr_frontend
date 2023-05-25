@@ -77,7 +77,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "75",
     "properties" : {
-      "name" : "British Columbia"
+      "name" : "BC"
     },
     "geometry" : {
       "type" : "MultiPolygon",
