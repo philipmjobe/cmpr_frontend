@@ -164,7 +164,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "83",
     "properties" : {
-      "name" : "Saskatchewan"
+      "name" : "SK"
 			},
 			"geometry" : {
 				"type" : "Polygon",
