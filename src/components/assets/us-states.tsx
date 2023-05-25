@@ -175,7 +175,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
 			"type" : "Feature",
 			"id" : "84",
 			"properties" : {
-				"name" : "Yukon Territory"
+				"name" : "YT"
 			},
 			"geometry" : {
 				"type" : "Polygon",
