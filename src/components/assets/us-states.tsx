@@ -186,7 +186,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
 			"type" : "Feature",
 			"id" : "85",
 			"properties" : {
-				"name" : "New Brunswick"
+				"name" : "NB"
 			},
 			"geometry" : {
 				"type" : "Polygon",
