@@ -110,7 +110,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "78",
     "properties" : {
-      "name" : "Northwest Territories"
+      "name" : "NT"
     },
     "geometry" : {
       "type" : "MultiPolygon",
