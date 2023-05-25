@@ -142,7 +142,7 @@ const statesData: GeoJSON.FeatureCollection = {"type":"FeatureCollection","featu
     "type" : "Feature",
     "id" : "81",
     "properties" : {
-      "name" : "Prince Edward Island"
+      "name" : "PE"
     },
     "geometry" : {
       "type" : "Polygon",
