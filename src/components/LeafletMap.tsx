@@ -111,7 +111,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       map.remove();
     };
   }, [campgrounds]);
-  return <div id="map" style={{ height: '500px', width: '500px' }} />;
+  return <div id="map" style={{ height: '100vh', width: '100vw' }} />;
 };
 
 export default LeafletMap;

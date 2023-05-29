@@ -22,7 +22,7 @@ interface CampgroundsProps {
   children: (campgrounds: Campground[]) => React.ReactNode;
 }
 
-const Campgrounds: React.FC<CampgroundsProps> = ({ children }) => {
+const Campgrounds = ({ children }: CampgroundsProps) => {
   const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
 
   useEffect(() => {
@@ -43,7 +43,8 @@ const Campgrounds: React.FC<CampgroundsProps> = ({ children }) => {
     fetchCampgrounds();
   }, []);
 
-  return <>{React.isValidElement(children) ? React.cloneElement(children as React.ReactElement, { campgrounds }) : null}</>;
+  return <>{children(campgrounds)}</>;
+
 };
 
 export default Campgrounds;
