@@ -30,6 +30,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
   const mapRef = useRef<null | L.Map>(null);
 
   useEffect(() => {
+    console.log('Inside useEffect');
     const map = L.map('map').setView([48.3544091, -99.9980711], 4);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -110,8 +111,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       map.remove();
     };
   }, [campgrounds]);
-
-  return <div id="map" style={{ height: '100%', width: '100%' }} />;
+  return <div id="map" style={{ height: '500px', width: '500px' }} />;
 };
 
 export default LeafletMap;
