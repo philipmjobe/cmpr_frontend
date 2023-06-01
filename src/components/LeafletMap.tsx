@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
+import { Link } from 'react-router-dom';
 
 
 interface LeafletMapProps {
@@ -87,7 +88,12 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
           shadowAnchor: [13, 41]
         });
         const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
-        marker.bindPopup(campground.campground_name);
+        marker.bindPopup(`
+        <div>
+          <h3>${campground.campground_name}</h3>
+          <Link to="/campgrounds/${campground.id}">View Details</Link>
+        </div>
+      `);
         marker.addTo(map);
       });
     }

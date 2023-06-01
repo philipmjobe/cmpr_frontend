@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import CampgroundDetails from './CampgroundDetails';
 
 const CampgroundPage = () => {
   const { id } = useParams();
@@ -23,8 +24,7 @@ const CampgroundPage = () => {
 
   return (
     <div>
-      <h2>{campground["campground_name"]}</h2>
-      {/* Display other campground details */}
+      <CampgroundDetails campground={campground} />
     </div>
   );
 };
