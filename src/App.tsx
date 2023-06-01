@@ -1,51 +1,6 @@
-// import React from 'react';
-// import LeafletMap from './components/LeafletMap';
-// import Campgrounds from './components/Campgrounds';
-// import { Campground } from './components/types';
-
-// const App = () => {
-//   return (
-//     <div style={{ height: '100vh', width: '100vw' }}>
-//       <Campgrounds>
-//         {(campgrounds: Campground[]) => <LeafletMap campgrounds={campgrounds} />}
-//       </Campgrounds>
-//     </div>
-//   );
-// };
-
-// export default App;
-
-// import React from 'react';
-// import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import LeafletMap from './components/LeafletMap';
-// import Campgrounds from './components/Campgrounds';
-// import CampgroundDetails from './components/CampgroundDetails';
-// import { Campground } from './components/types';
-
-// const App = () => {
-//   return (
-//     <div style={{ height: '100vh', width: '100vw' }}>
-//       <Router>
-//         <Route path="/">
-//           <Campgrounds>
-//             {(campgrounds: Campground[]) => (
-//               <LeafletMap campgrounds={campgrounds} />
-//             )}
-//           </Campgrounds>
-//         </Route>
-//         <Route
-//           path="/campgrounds/:id"
-//           element={<CampgroundDetails campground={CampgroundDetails} />}
-//         />
-//       </Router>
-//     </div>
-//   );
-// };
-
-// export default App;
-
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
+import NavigationContext from './components/NavigationContext';
 import LeafletMap from './components/LeafletMap';
 import CampgroundDetails from './components/CampgroundDetails';
 import Campgrounds from './components/Campgrounds';
@@ -69,7 +24,9 @@ const CampgroundDetailsWrapper: React.FC<CampgroundDetailsWrapperProps> = ({ cam
 
 const App: React.FC = () => {
   const [campgrounds, setCampgrounds] = useState<Campground[]>([]);
+  const basename = '/';
 
+  
   useEffect(() => {
     const fetchCampgrounds = async () => {
       try {
@@ -84,26 +41,31 @@ const App: React.FC = () => {
     fetchCampgrounds();
   }, []);
 
+  const handleCampgroundClick = (id: number) => {
+    // Handle the campground click event
+    console.log('Campground clicked:', id);
+  };
+
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={<LeafletMap campgrounds={campgrounds} />}
-          />
-          <Route
-            path="/campgrounds/:id"
-            element={
-              <Campgrounds>
-                {(campgrounds: Campground[]) => (
-                  <CampgroundDetailsWrapper campgrounds={campgrounds} />
-                )}
-              </Campgrounds>
-            }
-          />
-        </Routes>
-      </Router>
+      <NavigationContext.Provider value={{ basename }}>
+      <Routes>
+        <Route
+          path="/"
+          element={<LeafletMap campgrounds={campgrounds} onCampgroundClick={handleCampgroundClick} />}
+        />
+        <Route
+          path="/campgrounds/:id"
+          element={
+            <Campgrounds>
+              {(campgrounds: Campground[]) => (
+                <CampgroundDetailsWrapper campgrounds={campgrounds} />
+              )}
+            </Campgrounds>
+          }
+        />
+      </Routes>
+      </NavigationContext.Provider>
     </div>
   );
 };

@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
 import { Link } from 'react-router-dom';
+import { renderToStaticMarkup } from 'react-dom/server';
+import NavigationContext from './NavigationContext';
+
+
 
 
 interface LeafletMapProps {
   campgrounds: Campground[];
+  onCampgroundClick: (id: number) => void;
 }
 
 interface Campground {
@@ -27,8 +32,10 @@ interface Campground {
   nearest_town: string;
 }
 
-const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
+const LeafletMap = ({ campgrounds, onCampgroundClick }: LeafletMapProps) => {
   const mapRef = useRef<null | L.Map>(null);
+  const { basename } = React.useContext(NavigationContext) || {};
+
 
   useEffect(() => {
     console.log('Inside useEffect');
@@ -66,6 +73,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       geojson.resetStyle(e.target);
     }
 
+
     let geojson: GeoJSON;
     function zoomToFeature(e: LeafletMouseEvent) {
       map.fitBounds(e.target.getBounds());
@@ -88,14 +96,16 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
           shadowAnchor: [13, 41]
         });
         const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
-        marker.bindPopup(`
-        <div>
-          <h3>${campground.campground_name}</h3>
-          <Link to="/campgrounds/${campground.id}">View Details</Link>
-        </div>
-      `);
-        marker.addTo(map);
-      });
+        marker.bindPopup(
+          renderToStaticMarkup(
+          <div>
+            <h3>`${campground.campground_name}`</h3>
+            <Link to={`/campgrounds/${campground.id}`}>View Details</Link>
+          </div>
+          )
+        );
+      marker.addTo(map);
+    });
     }
 
     function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
