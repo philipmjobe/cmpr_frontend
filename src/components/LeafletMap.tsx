@@ -2,16 +2,10 @@ import React, { useEffect, useRef, useContext } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
-import { Link } from 'react-router-dom';
-import { renderToStaticMarkup } from 'react-dom/server';
-import NavigationContext from './NavigationContext';
-
-
 
 
 interface LeafletMapProps {
   campgrounds: Campground[];
-  onCampgroundClick: (id: number) => void;
 }
 
 interface Campground {
@@ -32,10 +26,8 @@ interface Campground {
   nearest_town: string;
 }
 
-const LeafletMap = ({ campgrounds, onCampgroundClick }: LeafletMapProps) => {
+const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
   const mapRef = useRef<null | L.Map>(null);
-  const { basename } = React.useContext(NavigationContext) || {};
-
 
   useEffect(() => {
     console.log('Inside useEffect');
@@ -97,14 +89,9 @@ const LeafletMap = ({ campgrounds, onCampgroundClick }: LeafletMapProps) => {
         });
         const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
         marker.bindPopup(
-          renderToStaticMarkup(
-          <div>
-            <h3>`${campground.campground_name}`</h3>
-            <Link to={`/campgrounds/${campground.id}`}>View Details</Link>
-          </div>
-          )
+          campground.campground_name
         );
-      marker.addTo(map);
+        marker.addTo(map);
     });
     }
 
