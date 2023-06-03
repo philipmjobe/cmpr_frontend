@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
@@ -28,6 +28,8 @@ interface Campground {
 
 const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
   const mapRef = useRef<null | L.Map>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const markersRef = useRef<L.LayerGroup<any> | null>(null);
 
   useEffect(() => {
     console.log('Inside useEffect');
@@ -76,6 +78,10 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
         (campground: Campground) => campground.state.trim().toUpperCase() === stateName.trim().toUpperCase(),
         );
 
+        if (markersRef.current) {
+          markersRef.current.clearLayers();
+        }
+
 
       stateCampgrounds.forEach(campground => {
         const customIcon = L.icon({
@@ -87,12 +93,31 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
           shadowSize: [41, 41],
           shadowAnchor: [13, 41]
         });
+        
         const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
-        marker.bindPopup(
-          campground.campground_name
-        );
+        if (markersRef.current) {
+          markersRef.current.addLayer(marker);
+        }
+        const popupContent = `
+          <div>
+            <h3>${campground.campground_name}</h3>
+            <p>Code: ${campground.campground_code}</p>
+            <p>Type: ${campground.campground_type}</p>
+            <p>Phone Number: ${campground.phone_number}</p>
+            <p>Dates Open: ${campground.dates_open}</p>
+            <p>Comments: ${campground.comments}</p>
+            <p>Number of Campsites: ${campground.number_of_campsites}</p>
+            <p>Elevation: ${campground.elevation}</p>
+            <p>Amenities: ${campground.amenities}</p>
+            <p>Nearest Town: ${campground.nearest_town}</p>
+          </div>
+        `;
+        if (markersRef.current) {
+          marker.addTo(markersRef.current);
+        }
+        marker.bindPopup(popupContent);
         marker.addTo(map);
-    });
+      });
     }
 
     function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
@@ -114,7 +139,17 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       map.remove();
     };
   }, [campgrounds]);
-  return <div id="map" style={{ height: '100vh', width: '100vw' }} />;
+
+  return (
+    <div>
+      <div id="map" style={{ height: '100vh', width: '100vw' }} />
+      {selectedState && (
+        <div>
+          <h3>Selected State: {selectedState}</h3>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default LeafletMap;
