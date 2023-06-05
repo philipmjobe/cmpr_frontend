@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, Layer, LeafletMouseEvent } from 'leaflet';
 import statesData from './assets/us-states';
+import Legend from './Legend';
+
 
 
 interface LeafletMapProps {
@@ -145,6 +147,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
           <h3>Selected State: {selectedState}</h3>
         </div>
       )}
+      <Legend />
     </div>
   );
 };
