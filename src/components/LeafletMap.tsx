@@ -71,29 +71,28 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
     let geojson: GeoJSON;
     function zoomToFeature(e: LeafletMouseEvent) {
       map.fitBounds(e.target.getBounds());
-
-      // Add campground markers
+    
+      // Remove markers of previously selected state
+      if (markersRef.current) {
+        markersRef.current.clearLayers();
+      }
+    
       const stateName = e.target.feature.properties.name;
       const stateCampgrounds: Campground[] = campgrounds.filter(
-        (campground: Campground) => campground.state.trim().toUpperCase() === stateName.trim().toUpperCase(),
-        );
-
-        if (markersRef.current) {
-          markersRef.current.clearLayers();
-        }
-
-
+        (campground: Campground) =>
+          campground.state.trim().toUpperCase() === stateName.trim().toUpperCase()
+      );
+    
       stateCampgrounds.forEach(campground => {
         const customIcon = L.icon({
           iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/800px-Google_Maps_pin.svg.png',
           iconSize: [25, 41],
           iconAnchor: [12, 41],
           popupAnchor: [1, -34],
-          // shadowUrl: 'https://media.istockphoto.com/id/1160934392/vector/thin-out-line-red-pin-location-gps-icon-geometric-marker-flat-shape-element-abstract-eps-10-shadow.jpg?s=612x612&w=0&k=20&c=z-mu6I7iC4aZwMQGOJvE7GHu1_4Zr_-RCdNej2CR6fY=',
           shadowSize: [41, 41],
           shadowAnchor: [13, 41]
         });
-        
+    
         const marker = L.marker([campground.lat, campground.lng], { icon: customIcon });
         if (markersRef.current) {
           markersRef.current.addLayer(marker);
@@ -112,13 +111,11 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
             <p>Nearest Town: ${campground.nearest_town}</p>
           </div>
         `;
-        if (markersRef.current) {
-          marker.addTo(markersRef.current);
-        }
         marker.bindPopup(popupContent);
         marker.addTo(map);
       });
     }
+    
 
     function onEachFeature(feature: GeoJSON.Feature, layer: Layer) {
       layer.on({
