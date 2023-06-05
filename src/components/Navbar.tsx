@@ -1,31 +1,18 @@
-import React, { useState, SyntheticEvent } from 'react';
-import LoginModal from './LoginModal';
+import React from 'react';
 
 const Navbar = () => {
-  const [showModal, setShowModal] = useState(false);
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   return (
-    <div>
-      <h1>Campr</h1>
-      <nav>
-        {/* <ul>
-          <li>Home</li>
-          <li>About</li>
-          <li>Contact</li>
-        </ul> */}
-        <button onClick={openModal}>Sign In</button>
-      </nav>
-
-      {showModal && <LoginModal closeModal={closeModal} />}
-    </div>
+    <nav className="bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0">
+            <span className="text-white font-semibold text-lg">Campr</span>
+          </div>
+          <div className="flex">
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 };
 
