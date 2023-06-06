@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import Modal from './LoginModal';
+import React from 'react';
 
-const Navbar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface NavbarProps {
+  onModalOpen: () => void;
+}
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+const Navbar: React.FC<NavbarProps> = ({ onModalOpen }) => {
+  const handleButtonClick = () => {
+    console.log('button clicked')
+    onModalOpen();
   };
 
   return (
@@ -20,13 +18,16 @@ const Navbar = () => {
             <span className="text-white font-semibold text-lg">Campr</span>
           </div>
           <div className="flex">
-            <button onClick={handleModalOpen} className="text-white hover:text-gray-200">
-              Login
-            </button>
+          <button
+            onClick={handleButtonClick}
+            className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+          >
+            Open Modal
+          </button>
           </div>
         </div>
       </div>
-      {isModalOpen && <Modal closeModal={handleModalClose} />}
     </nav>
   );
 };
