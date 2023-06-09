@@ -140,7 +140,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
 
   return (
     <div>
-      <div id="map" style={{ height: '100vh', width: '100vw' }} />
+      <div id="map" style={{ height: '100vh', width: '100vw', pointerEvents: 'none' }} />
       {selectedState && (
         <div>
           <h3>Selected State: {selectedState}</h3>
