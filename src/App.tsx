@@ -9,6 +9,8 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleModalToggle = () => {
+    console.log('Modal toggled');
+
     setIsModalOpen(true);
   };
 
