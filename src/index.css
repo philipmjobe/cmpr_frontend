@@ -53,5 +53,32 @@ body {
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 9999;
+  border-radius: 10px;
 }
+
+input[type="text"],
+input[type="password"] {
+  border: 1px solid #ccc;
+  padding: 7px;
+  background-color: #f7f7f7;
+  width: 80%;
+}
+
+input[type="email"] {
+  border: 1px solid #ccc;
+  padding: 7px;
+  background-color: #f7f7f7;
+  width: 80%;
+}
+
+.button-login {
+  background-color: #19ac1d !important;
+  color: black;
+}
+
+.button-signup {
+  background-color: #f44336 !important;
+  color: black;
+}
+
 
