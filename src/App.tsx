@@ -6,28 +6,38 @@ import { Campground } from './components/types';
 import LoginModal from './components/LoginModal';
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleModalToggle = () => {
-    console.log('Modal toggled');
-
-    setIsModalOpen(true);
+  const handleLogin = (user: string) => {
+    setIsLoggedIn(true);
+    setUserName(user);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserName('');
+  };
+
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
-      <Navbar onModalToggle={handleModalToggle} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        userName={userName}
+        onLogout={handleLogout}
+        onModalToggle={handleModalToggle}
+      />
       <Campgrounds>
         {(campgrounds: Campground[]) => <LeafletMap campgrounds={campgrounds} />}
       </Campgrounds>
-      {isModalOpen && <LoginModal onClose={handleCloseModal} />}
+      {isModalOpen && <LoginModal onClose={handleModalToggle} />}
     </div>
   );
-  
 };
 
 export default App;

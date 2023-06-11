@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../index.css'
+import axios from 'axios';
+import '../index.css';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -11,30 +12,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login state
 
   useEffect(() => {
-    const handleEscapeKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-  
-    const handleMouseDown = (e: MouseEvent) => {
-      const modalContainer = document.querySelector('.modal-container');
-      if (modalContainer && !modalContainer.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-  
-    document.addEventListener('keydown', handleEscapeKeyPress);
-    document.addEventListener('mousedown', handleMouseDown);
-  
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKeyPress);
-      document.removeEventListener('mousedown', handleMouseDown);
-    };
-  }, [onClose]);
-  
+    // Check if user is already logged in
+    const jwtToken = localStorage.getItem('jwt');
+    if (jwtToken) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -54,6 +40,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
 
   const handleModeToggle = () => {
     setIsLoginMode(!isLoginMode);
+  };
+
+  const handleLogout = () => {
+    // Perform the sign-out logic
+    delete axios.defaults.headers.common['Authorization'];
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user_id');
+    setIsLoggedIn(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,17 +71,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
       // Make login API call
       try {
         const response = await fetch('http://localhost:3000/sessions', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
         // Handle the response
         if (response.ok) {
           // Login successful
           console.log('Login successful');
+          setIsLoggedIn(true); // Set the login state to true
         } else {
           // Login failed
           console.error('Login failed');
@@ -99,19 +94,24 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
       // Make signup API call
       try {
         const response = await fetch('http://localhost:3000/users', {
-        method: 'POST',
-        body: JSON.stringify({ first_name: firstName, last_name: lastName, email, password, password_confirmation: passwordConfirmation }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
+          method: 'POST',
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  
         // Handle the response
         if (response.ok) {
           // Signup successful
           console.log('Signup successful');
+          setIsLoggedIn(true); // Set the login state to true
         } else {
           // Signup failed
           console.error('Signup failed');
@@ -121,86 +121,61 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
       }
     }
   };
-  
 
-  
-    return (
-      <div className="modal-container">
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div
-            className="bg-white rounded-lg p-8 w-96 relative z-10"
-            style={{ zIndex: '9999 !important' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-2xl font-bold mb-4">{isLoginMode ? 'Log In' : 'Sign Up'}</h2>
+  return (
+    <div className="modal-container">
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div
+          className="bg-white rounded-lg p-8 w-96 relative z-10"
+          style={{ zIndex: '9999 !important' }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 className="text-2xl font-bold mb-4">{isLoginMode ? 'Log In' : 'Sign Up'}</h2>
+          {isLoggedIn ? (
+            <>
+              <p>Welcome, User!</p>
+              <button type="button" className="px-4 rounded-lg button-signup" onClick={handleLogout}>
+                Sign Out
+              </button>
+            </>
+          ) : (
             <form onSubmit={handleSubmit}>
-              <div className='form-group'>
+              <div className="form-group">
                 <div className="flex flex-col">
-                  <label htmlFor='email'>Email:</label>
-                  <input
-                    type='email'
-                    id='email'
-                    value={email}
-                    onChange={handleEmailChange}
-                    required
-                  />
+                  <label htmlFor="email">Email:</label>
+                  <input type="email" id="email" value={email} onChange={handleEmailChange} required />
                 </div>
               </div>
-              <div className='form-group'>
-                <label htmlFor='password'>Password:</label>
-                <input
-                  type='password'
-                  id='password'
-                  value={password}
-                  onChange={handlePasswordChange}
-                  required
-                />
+              <div className="form-group">
+                <label htmlFor="password">Password:</label>
+                <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
               </div>
               {!isLoginMode && (
                 <>
-                  <div className='form-group'>
-                    <label htmlFor='firstName'>First Name:</label>
-                    <input
-                      type='text'
-                      id='firstName'
-                      value={firstName}
-                      onChange={handleFirstNameChange}
-                      required
-                    />
+                  <div className="form-group">
+                    <label htmlFor="firstName">First Name:</label>
+                    <input type="text" id="firstName" value={firstName} onChange={handleFirstNameChange} required />
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor='lastName'>Last Name:</label>
-                    <input
-                      type='text'
-                      id='lastName'
-                      value={lastName}
-                      onChange={handleLastNameChange}
-                      required
-                    />
+                  <div className="form-group">
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input type="text" id="lastName" value={lastName} onChange={handleLastNameChange} required />
                   </div>
                 </>
               )}
               <div className="flex justify-center mb-4">
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg mr-2 button-login"
-                >
+                <button type="submit" className="px-4 py-2 rounded-lg mr-2 button-login">
                   {isLoginMode ? 'Log In' : 'Sign Up'}
                 </button>
-                <button
-                  type="button"
-                  className="px-4 rounded-lg button-signup"
-                  onClick={handleModeToggle}
-                >
+                <button type="button" className="px-4 rounded-lg button-signup" onClick={handleModeToggle}>
                   {isLoginMode ? 'Sign Up' : 'Log In'}
                 </button>
               </div>
             </form>
-          </div>
+          )}
         </div>
       </div>
-    );
-    
-  }
+    </div>
+  );
+};
 
 export default LoginModal;
