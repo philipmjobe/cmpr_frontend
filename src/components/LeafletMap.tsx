@@ -101,17 +101,18 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
         const popupContent = `
           <div>
             <h3>${campground.campground_name}</h3>
-            <p>Code: ${campground.campground_code}</p>
-            <p>Type: ${campground.campground_type}</p>
-            <p>Phone Number: ${campground.phone_number}</p>
-            <p>Dates Open: ${campground.dates_open}</p>
-            <p>Comments: ${campground.comments}</p>
-            <p>Number of Campsites: ${campground.number_of_campsites}</p>
-            <p>Elevation: ${campground.elevation}</p>
-            <p>Amenities: ${campground.amenities}</p>
-            <p>Nearest Town: ${campground.nearest_town}</p>
+            ${campground.campground_code ? `<p>Code: ${campground.campground_code}</p>` : ''}
+            ${campground.campground_type ? `<p>Type: ${campground.campground_type}</p>` : ''}
+            ${campground.phone_number ? `<p>Phone Number: ${campground.phone_number}</p>` : ''}
+            ${campground.dates_open ? `<p>Dates Open: ${campground.dates_open}</p>` : ''}
+            ${campground.comments ? `<p>Comments: ${campground.comments}</p>` : ''}
+            ${campground.number_of_campsites ? `<p>Number of Campsites: ${campground.number_of_campsites}</p>` : ''}
+            ${campground.elevation ? `<p>Elevation: ${campground.elevation}</p>` : ''}
+            ${campground.amenities ? `<p>Amenities: ${campground.amenities}</p>` : ''}
+            ${campground.nearest_town ? `<p>Nearest Town: ${campground.nearest_town}</p>` : ''}
           </div>
         `;
+
         marker.bindPopup(popupContent);
         marker.addTo(map);
       });
