@@ -3,11 +3,11 @@
 @import 'tailwindcss/utilities';
 
 
-button:not(.button-login),
+/* button:not(.button-login),
 [type='button']:not(.button-login),
 [type='reset']:not(.button-login),
 [type='submit']:not(.button-login) {
   -webkit-appearance: button;
   background-color: transparent;
   background-image: none;
-}
+} */

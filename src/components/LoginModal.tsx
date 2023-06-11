@@ -18,13 +18,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
         onClose();
       }
     };
-
+  
+    const handleMouseDown = (e: MouseEvent) => {
+      const modalContainer = document.querySelector('.modal-container');
+      if (modalContainer && !modalContainer.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+  
     document.addEventListener('keydown', handleEscapeKeyPress);
-
+    document.addEventListener('mousedown', handleMouseDown);
+  
     return () => {
       document.removeEventListener('keydown', handleEscapeKeyPress);
+      document.removeEventListener('mousedown', handleMouseDown);
     };
   }, [onClose]);
+  
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
