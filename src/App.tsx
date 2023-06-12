@@ -1,41 +1,38 @@
 import React, { useState } from 'react';
-import LeafletMap from './components/LeafletMap';
 import Navbar from './components/Navbar';
-import Campgrounds from './components/Campgrounds';
-import { Campground } from './components/types';
 import LoginModal from './components/LoginModal';
+import Campgrounds from './components/Campgrounds';
+import LeafletMap from './components/LeafletMap';
+import { Campground } from './components/types';
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
+const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleLogin = (user: string) => {
-    setIsLoggedIn(true);
-    setUserName(user);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserName('');
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div style={{ height: '100vh', width: '100vw' }}>
+    <div>
       <Navbar
         isLoggedIn={isLoggedIn}
-        userName={userName}
         onLogout={handleLogout}
         onModalToggle={handleModalToggle}
       />
       <Campgrounds>
         {(campgrounds: Campground[]) => <LeafletMap campgrounds={campgrounds} />}
       </Campgrounds>
-      {isModalOpen && <LoginModal onClose={handleModalToggle} />}
+      {isModalOpen && <LoginModal onLogin={handleLogin} onClose={handleModalToggle} />}
     </div>
   );
 };

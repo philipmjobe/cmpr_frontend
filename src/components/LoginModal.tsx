@@ -3,10 +3,11 @@ import axios from 'axios';
 import '../index.css';
 
 interface LoginModalProps {
+  onLogin: () => void;
   onClose: () => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -77,6 +78,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
             'Content-Type': 'application/json',
           },
         });
+        onLogin();
+        onClose();
 
         // Handle the response
         if (response.ok) {
@@ -106,6 +109,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
             'Content-Type': 'application/json',
           },
         });
+        onLogin();
+        onClose();
 
         // Handle the response
         if (response.ok) {
@@ -131,47 +136,32 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <h2 className="text-2xl font-bold mb-4">{isLoginMode ? 'Log In' : 'Sign Up'}</h2>
-          {isLoggedIn ? (
-            <>
-              <p>Welcome, User!</p>
-              <button type="button" className="px-4 rounded-lg button-signup" onClick={handleLogout}>
-                Sign Out
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <div className="flex flex-col">
+                <label htmlFor="email">Email:</label>
+                <input type="email" id="email" value={email} onChange={handleEmailChange} required />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
+            </div>
+            {!isLoginMode && (
+              <>
+                {/* Additional fields for signup */}
+                {/* ... */}
+              </>
+            )}
+            <div className="flex justify-center mb-4">
+              <button type="submit" className="px-4 py-2 rounded-lg mr-2 button-login">
+                {isLoginMode ? 'Log In' : 'Sign Up'}
               </button>
-            </>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <div className="flex flex-col">
-                  <label htmlFor="email">Email:</label>
-                  <input type="email" id="email" value={email} onChange={handleEmailChange} required />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
-              </div>
-              {!isLoginMode && (
-                <>
-                  <div className="form-group">
-                    <label htmlFor="firstName">First Name:</label>
-                    <input type="text" id="firstName" value={firstName} onChange={handleFirstNameChange} required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input type="text" id="lastName" value={lastName} onChange={handleLastNameChange} required />
-                  </div>
-                </>
-              )}
-              <div className="flex justify-center mb-4">
-                <button type="submit" className="px-4 py-2 rounded-lg mr-2 button-login">
-                  {isLoginMode ? 'Log In' : 'Sign Up'}
-                </button>
-                <button type="button" className="px-4 rounded-lg button-signup" onClick={handleModeToggle}>
-                  {isLoginMode ? 'Sign Up' : 'Log In'}
-                </button>
-              </div>
-            </form>
-          )}
+              <button type="button" className="px-4 rounded-lg button-signup" onClick={handleModeToggle}>
+                {isLoginMode ? 'Sign Up' : 'Log In'}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
