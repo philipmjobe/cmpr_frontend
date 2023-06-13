@@ -35,10 +35,16 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
 
   useEffect(() => {
     const map = L.map('map').setView([48.3544091, -99.9980711], 4);
+    map.options.maxZoom = 7;
+
+    // const markers = L.layerGroup();
+    // markersRef.current = markers;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+
+    map.on('dblclick', handleDoubleClick);
 
     function style(feature: GeoJSON.Feature): L.PathOptions {
       return {
@@ -136,8 +142,32 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
 
     return () => {
       map.remove();
+      map.off('dblclick', handleDoubleClick)
     };
   }, [campgrounds]);
+
+  const handleDoubleClick = () => {
+    const map = mapRef.current;
+    const markers = markersRef.current;
+  
+    if (map && markers) {
+      // Check if the current zoom level is greater than the initial zoom level
+      // If it is, zoom out to the initial zoom level
+      if (map.getZoom() > 4) {
+        map.setView([48.3544091, -99.9980711], 4);
+      } else {
+        // If the zoom level is already at the initial zoom level, remove the markers
+        markers.clearLayers(); // Call clearLayers on the LayerGroup instance
+      }
+    }
+  };
+  
+  
+  
+  
+  
+  
+  
 
   return (
     <div>
