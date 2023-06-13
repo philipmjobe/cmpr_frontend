@@ -59,17 +59,15 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   border-radius: 10px;
+  width: 500px;
 }
 
 input[type="text"],
-input[type="password"] {
-  border: 1px solid #ccc;
-  padding: 7px;
-  background-color: #f7f7f7;
-  width: 80%;
-}
-
-input[type="email"] {
+input[type="first name"],
+input[type="last name"],
+input[type="email"],
+input[type="password"],
+input[type="password conformation"] {
   border: 1px solid #ccc;
   padding: 7px;
   background-color: #f7f7f7;
@@ -79,9 +77,13 @@ input[type="email"] {
 .button-login {
   background-color: #19ac1d !important;
   color: black;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .button-signup {
-  background-color: #f44336 !important;
-  color: black;
+  background-color: #164ce3 !important;
+  color: rgb(252, 252, 252);
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
