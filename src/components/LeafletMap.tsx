@@ -69,8 +69,10 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
     
       // Remove markers of previously selected state
       if (markersRef.current) {
-        markersRef.current.clearLayers();
-      }
+        markersRef.current.getLayers().forEach((layer) => {
+        map.removeLayer(layer);
+      });
+    }
     
       const stateName = e.target.feature.properties.name;
       const stateCampgrounds: Campground[] = campgrounds.filter(
@@ -121,6 +123,7 @@ const LeafletMap = ({ campgrounds }: LeafletMapProps) => {
       style: style as L.StyleFunction,
       onEachFeature: onEachFeature
     }).addTo(map);
+
     mapRef.current = map;
     return () => {
       map.remove();
