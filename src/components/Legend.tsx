@@ -3,7 +3,7 @@ import React from 'react';
 const Legend = () => {
   return (
     <div className="legend">
-      <h4>Legend</h4>
+      <h4>Amenities Legend</h4>
       <div>
         <strong>RV Hookups:</strong>
         <ul>
