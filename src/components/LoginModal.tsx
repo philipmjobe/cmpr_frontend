@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../index.css';
 
 interface LoginModalProps {
   onLogin: () => void;
   onClose: () => void;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose, setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login state
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleOutsideClick = (e: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      onClose();
+    }
+  }
 
   useEffect(() => {
     // Check if user is already logged in
     const jwtToken = localStorage.getItem('jwt');
     if (jwtToken) {
       setIsLoggedIn(true);
+    }
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
     }
   }, []);
 
@@ -39,6 +52,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
     setLastName(e.target.value);
   };
 
+  const handlePasswordConfirmationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordConfirmation(e.target.value);
+  };
+
   const handleModeToggle = () => {
     setIsLoginMode(!isLoginMode);
   };
@@ -53,19 +70,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const target = e.target as HTMLFormElement;
-    const firstNameInput = target.elements.namedItem('firstName') as HTMLInputElement;
-    const lastNameInput = target.elements.namedItem('lastName') as HTMLInputElement;
-    const emailInput = target.elements.namedItem('email') as HTMLInputElement;
-    const passwordInput = target.elements.namedItem('password') as HTMLInputElement;
-    const passwordConfirmationInput = target.elements.namedItem('passwordConfirmation') as HTMLInputElement;
-
-    const firstName = firstNameInput?.value;
-    const lastName = lastNameInput?.value;
-    const email = emailInput?.value;
-    const password = passwordInput?.value;
-    const passwordConfirmation = passwordConfirmationInput?.value;
 
     // Make the API call based on the login mode
     if (isLoginMode) {
@@ -95,6 +99,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
       }
     } else {
       // Make signup API call
+      if (password !== passwordConfirmation) {
+        console.error('Password and password confirmation do not match');
+        return;
+      }
+
       try {
         const response = await fetch('http://localhost:3000/users', {
           method: 'POST',
@@ -129,14 +138,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
 
   return (
     <div className="modal-container">
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="inset-0 flex items-center justify-center">
         <div
           className="bg-white rounded-lg p-8 w-96 relative z-10"
           style={{ zIndex: '9999 !important' }}
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
           <h2 className="text-2xl font-bold mb-4">{isLoginMode ? 'Log In' : 'Sign Up'}</h2>
           <form onSubmit={handleSubmit}>
+            {!isLoginMode && (
+              <>
+                <div className="form-group">
+                  <div className="flex flex-col">
+                    <label htmlFor="firstName">First Name:</label>
+                    <input type="text" id="firstName" value={firstName} onChange={handleFirstNameChange} required />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="flex flex-col">
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input type="text" id="lastName" value={lastName} onChange={handleLastNameChange} required />
+                  </div>
+                </div>
+              </>
+            )}
             <div className="form-group">
               <div className="flex flex-col">
                 <label htmlFor="email">Email:</label>
@@ -144,14 +170,24 @@ const LoginModal: React.FC<LoginModalProps> = ({ onLogin, onClose }) => {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password:</label>
-              <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
+              <div className="flex flex-col">
+                <label htmlFor="password">Password:</label>
+                <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
+              </div>
             </div>
             {!isLoginMode && (
-              <>
-                {/* Additional fields for signup */}
-                {/* ... */}
-              </>
+              <div className="form-group">
+                <div className="flex flex-col">
+                  <label htmlFor="passwordConfirmation">Password Confirmation:</label>
+                  <input
+                    type="password"
+                    id="passwordConfirmation"
+                    value={passwordConfirmation}
+                    onChange={handlePasswordConfirmationChange}
+                    required
+                  />
+                </div>
+              </div>
             )}
             <div className="flex justify-center mb-4">
               <button type="submit" className="px-4 py-2 rounded-lg mr-2 button-login">
