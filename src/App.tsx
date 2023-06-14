@@ -32,7 +32,7 @@ const App: React.FC = () => {
       <Campgrounds>
         {(campgrounds: Campground[]) => <LeafletMap campgrounds={campgrounds} />}
       </Campgrounds>
-      {isModalOpen && <LoginModal onLogin={handleLogin} onClose={handleModalToggle} setIsLoggedIn={setIsLoggedIn}/>}
+      {isModalOpen && <LoginModal onLogin={handleLogin} onClose={handleModalToggle} />}
     </div>
   );
 };
